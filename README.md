@@ -1,0 +1,2 @@
+# EnterLogTest
+for practice
