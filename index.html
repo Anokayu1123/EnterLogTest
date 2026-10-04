@@ -29,8 +29,8 @@
     <div class="box">
         <div class="header-area">
             <!-- 開くたびにランダムで1枚だけ軽量に読み込まれる画像枠 -->
-            <img id="randomGif" src="" alt="猫アイコン">
-            <h2>水捨て通知 🐾</h2>
+            <img id="randomGif" src="" alt="アイコン">
+            <h2>水捨て通知 🐸</h2>
         </div>
 
         <form id="checkForm">
@@ -49,35 +49,27 @@
     </div>
 
     <script>
-        // あなたのGASのウェブアプリURL
-        const gifList = [
-    "frog1.gif",
-    "frog2.gif",
-    "frog3.gif",
-    "frog4.gif",
-    "frog5.gif",
-    "frog6.gif",
-    "tanuki1.gif",
-    "tanuki2.gif"
-];
+        // ① あなたのGASのウェブアプリURLをここに正しく設定する
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjKJ7SZ_1t-WO6KZzCM1YYzc05gaSLnAdBygFS1SRg3jCDeul8z2nrMldz6ImIMGkx/exec";
 
-        // 7種類のGIFリスト（お好みのURLに書き換えてください）
+        // ② リポジトリ内にあるローカルのGIFファイルリスト（8種類）
         const gifList = [
-            "https://i.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif", // 1
-            "https://i.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",       // 2
-            "https://i.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif",   // 3
-            "https://i.giphy.com/media/13CoXNaUECiorm/giphy.gif",      // 4
-            "https://i.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif", // 5（サンプル）
-            "https://i.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",       // 6（サンプル）
-            "https://i.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif"    // 7（サンプル）
+            "frog1.gif",
+            "frog2.gif",
+            "frog3.gif",
+            "frog4.gif",
+            "frog5.gif",
+            "frog6.gif",
+            "tanuki1.gif",
+            "tanuki2.gif"
         ];
 
         window.addEventListener('DOMContentLoaded', () => {
-            // ① 7種類からランダムに1つ選んで表示（軽量化のため1枚のみ読み込み）
+            // リストからランダムに1つ選んで表示
             const randomIndex = Math.floor(Math.random() * gifList.length);
             document.getElementById('randomGif').src = gifList[randomIndex];
 
-            // ② 前回の選択を復元
+            // 前回の選択を復元
             const savedName = localStorage.getItem('lastSelectedUser');
             if (savedName) {
                 const radio = document.querySelector(`input[name="username"][value="${savedName}"]`);
