@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水捨て通知</title>
+    <!-- 検索エンジンにインデックスされないようにする設定 -->
+    <meta name="robots" content="noindex, nofollow">
+    
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 40px; background: #f4f4f9; }
+        .box { background: white; padding: 20px; border-radius: 10px; display: inline-block; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 100%; max-width: 320px; box-sizing: border-box; text-align: left; }
+        
+        .header-area { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        h2 { margin: 0; font-size: 1.5rem; }
+        .header-area img { width: 45px; height: 45px; object-fit: contain; }
+
+        label.radio-label { display: block; font-size: 1.2rem; margin: 12px 0; cursor: pointer; }
+        .memo-container { margin-top: 20px; }
+        .memo-container label { display: block; font-size: 0.9rem; color: #666; margin-bottom: 5px; }
+        .memo-container input[type="text"] { width: 100%; padding: 8px; box-sizing: border-box; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #4CAF50; color: white; border: none; padding: 12px 20px; font-size: 1.2rem; border-radius: 5px; cursor: pointer; margin-top: 20px; width: 100%; font-weight: bold; }
+        button:active { background: #45a049; }
+        #message { margin-top: 15px; font-weight: bold; color: #333; text-align: center; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <div class="header-area">
+            <!-- 開くたびにランダムで1枚だけ軽量に読み込まれる画像枠 -->
+            <img id="randomGif" src="" alt="猫アイコン">
+            <h2>水捨て通知 🐾</h2>
+        </div>
+
+        <form id="checkForm">
+            <label class="radio-label"><input type="radio" name="username" value="うなぎ"> うなぎ</label>
+            <label class="radio-label"><input type="radio" name="username" value="たこ"> たこ</label>
+
+            <div class="memo-container">
+                <label for="memo">備考（任意）：</label>
+                <input type="text" id="memo" placeholder="例：除湿器止まってたよ、とか">
+            </div>
+            
+            <button type="button" onclick="sendData()">OK</button>
+        </form>
+
+        <div id="message"></div>
+    </div>
+
+    <script>
+        // あなたのGASのウェブアプリURL
+        const gifList = [
+    "frog1.gif",
+    "frog2.gif",
+    "frog3.gif",
+    "frog4.gif",
+    "frog5.gif",
+    "frog6.gif",
+    "tanuki1.gif",
+    "tanuki2.gif"
+];
+
+        // 7種類のGIFリスト（お好みのURLに書き換えてください）
+        const gifList = [
+            "https://i.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif", // 1
+            "https://i.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",       // 2
+            "https://i.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif",   // 3
+            "https://i.giphy.com/media/13CoXNaUECiorm/giphy.gif",      // 4
+            "https://i.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif", // 5（サンプル）
+            "https://i.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",       // 6（サンプル）
+            "https://i.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif"    // 7（サンプル）
+        ];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // ① 7種類からランダムに1つ選んで表示（軽量化のため1枚のみ読み込み）
+            const randomIndex = Math.floor(Math.random() * gifList.length);
+            document.getElementById('randomGif').src = gifList[randomIndex];
+
+            // ② 前回の選択を復元
+            const savedName = localStorage.getItem('lastSelectedUser');
+            if (savedName) {
+                const radio = document.querySelector(`input[name="username"][value="${savedName}"]`);
+                if (radio) {
+                    radio.checked = true;
+                }
+            }
+        });
+
+        function sendData() {
+            const selected = document.querySelector('input[name="username"]:checked');
+            const memoInput = document.getElementById('memo').value;
+            const msg = document.getElementById('message');
+
+            if (!selected) {
+                alert("名前を選んでください！");
+                return;
+            }
+
+            const name = selected.value;
+            localStorage.setItem('lastSelectedUser', name);
+
+            // 爆速非同期送信（返事を待たずに裏で処理）
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                mode: "no-cors",
+                body: JSON.stringify({ 
+                    name: name,
+                    memo: memoInput 
+                })
+            });
+
+            // 押した瞬間にフォームを消して即時完了表示
+            document.getElementById('checkForm').style.display = 'none';
+            msg.innerHTML = `🐸 ${name}さんの<br>水捨て通知を送信完了！`;
+        }
+    </script>
+
+</body>
+</html>
