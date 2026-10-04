@@ -14,15 +14,17 @@
         /* ★横並び＆中央揃えにするエリア */
         .header-area { 
             display: flex; 
-            align-items: center; 
-            justify-content: center; /* ← ここで横方向のど真ん中に配置！ */
-            gap: 12px; 
+            align-items: center;       /* 縦方向の中心をピタッと揃える */
+            justify-content: center;   /* 横方向のど真ん中に配置する */
+            gap: 12px;                 /* 画像と文字の間の隙間 */
             margin-bottom: 20px; 
         }
-        
-        /* GIFの大きさ調整（お好みで変更してね） */
+        h2 { 
+            margin: 0; 
+            font-size: 1.5rem; 
+        }
         .header-area img { 
-            width: 60px;  
+            width: 55px;               /* アイコンの大きさ（お好みで調整してね） */
             height: auto; 
             object-fit: contain; 
         }
